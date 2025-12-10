@@ -1,0 +1,344 @@
+// Auto-generated ABI for CollateralManager
+
+export const COLLATERAL_MANAGER_ABI = [
+  {
+    type: "constructor",
+    inputs: [
+      {
+        name: "_loanManager",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "BASIS_POINTS",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "LOAN_DURATION",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "MARGIN_BPS",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "createLoanRecord",
+    inputs: [
+      {
+        name: "borrower",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "marginAmount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "loanAmount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "getLoanRecord",
+    inputs: [
+      {
+        name: "borrower",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "record",
+        type: "tuple",
+        internalType: "struct CollateralManager.LoanRecord",
+        components: [
+          {
+            name: "marginAmount",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "loanAmount",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "startTime",
+            type: "uint32",
+            internalType: "uint32",
+          },
+          {
+            name: "isActive",
+            type: "bool",
+            internalType: "bool",
+          },
+        ],
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "hasActiveLoan",
+    inputs: [
+      {
+        name: "borrower",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "hasActive",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "isLiquidatable",
+    inputs: [
+      {
+        name: "borrower",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "liquidatable",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "isLoanDue",
+    inputs: [
+      {
+        name: "borrower",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "isDue",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "liquidateLoan",
+    inputs: [
+      {
+        name: "borrower",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "loanManager",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "loanRecords",
+    inputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "marginAmount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "loanAmount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "startTime",
+        type: "uint32",
+        internalType: "uint32",
+      },
+      {
+        name: "isActive",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "repayLoan",
+    inputs: [
+      {
+        name: "borrower",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "setLoanManager",
+    inputs: [
+      {
+        name: "_loanManager",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "validateMargin",
+    inputs: [
+      {
+        name: "marginAmount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "loanAmount",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        name: "isValid",
+        type: "bool",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "pure",
+  },
+  {
+    type: "event",
+    name: "LoanLiquidated",
+    inputs: [
+      {
+        name: "borrower",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "LoanRecordCreated",
+    inputs: [
+      {
+        name: "borrower",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "margin",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "loan",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "LoanRepaid",
+    inputs: [
+      {
+        name: "borrower",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "error",
+    name: "ReentrancyGuardReentrantCall",
+    inputs: [],
+  },
+] as const;
+
+export const COLLATERAL_MANAGER_ADDRESS =
+  "0xF4624D5dc09047E1643F866925135E70c169822a";
