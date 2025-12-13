@@ -1,174 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useRestrictedWallet } from "@/hooks/contracts/useRestrictedWallet";
-import { StatusCard, StatusItem } from "@/components/ui/StatusCard";
-import { ExplorerLink } from "@/components/ui/ExplorerLink";
-import { TransactionButton } from "@/components/ui/TransactionButton";
 import { TransactionNotification } from "@/components/ui/TransactionNotification";
-import { AmountInput } from "@/components/ui/AmountInput";
 import { formatUnits } from "viem";
-import { CONTRACT_CONFIGS } from "@/lib/contracts/addresses";
-
-// Token configuration with actual contract addresses
-const COMMON_TOKENS = [
-  {
-    address: CONTRACT_CONFIGS.MOCK_USDC.address,
-    symbol: "USDC",
-    decimals: 6,
-    name: "USD Coin",
-    icon: "💵",
-  },
-  {
-    address: CONTRACT_CONFIGS.MOCK_ETH.address,
-    symbol: "ETH",
-    decimals: 18,
-    name: "Ethereum",
-    icon: "🔷",
-  },
-  {
-    address: CONTRACT_CONFIGS.MOCK_BTC.address,
-    symbol: "BTC",
-    decimals: 8,
-    name: "Bitcoin",
-    icon: "₿",
-  },
-];
-
-interface TokenBalanceCardProps {
-  token: (typeof COMMON_TOKENS)[0];
-  restrictedWalletAddress: string;
-  onWithdraw: (tokenAddress: string, amount: string, decimals: number) => void;
-  onWithdrawAll: (tokenAddress: string) => void;
-  isWithdrawing: boolean;
-}
-
-const TokenBalanceCard: React.FC<TokenBalanceCardProps> = ({
-  token,
-  onWithdraw,
-  onWithdrawAll,
-  isWithdrawing,
-}) => {
-  const [withdrawAmount, setWithdrawAmount] = useState("");
-  const { useRestrictedWalletBalance } = useRestrictedWallet();
-  const { data: balance } = useRestrictedWalletBalance(token.address);
-
-  const balanceFormatted = balance ? formatUnits(balance, token.decimals) : "0";
-  const hasBalance = balance && balance > BigInt(0);
-
-  const handleWithdraw = () => {
-    if (withdrawAmount && parseFloat(withdrawAmount) > 0) {
-      onWithdraw(token.address, withdrawAmount, token.decimals);
-      setWithdrawAmount("");
-    }
-  };
-
-  const handleWithdrawAll = () => {
-    onWithdrawAll(token.address);
-    setWithdrawAmount("");
-  };
-
-  // Show all tokens, but with different styling for zero balance
-  const isZeroBalance = !hasBalance;
-
-  return (
-    <div
-      className={`bg-[#1E1E1E] rounded-lg p-4 border transition-colors ${
-        isZeroBalance
-          ? "border-[rgba(163,163,163,0.1)] opacity-60"
-          : "border-[rgba(6,182,212,0.15)] hover:border-[rgba(6,182,212,0.3)]"
-      }`}>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <div className="text-2xl">{token.icon}</div>
-          <div>
-            <h4
-              className="text-lg font-normal text-white"
-              style={{
-                fontFamily: "Space Grotesk",
-                letterSpacing: "-0.5px",
-              }}>
-              {token.symbol}
-            </h4>
-            <p
-              className="text-sm text-[#A3A3A3] font-normal"
-              style={{ fontFamily: "Space Grotesk" }}>
-              {token.name}
-            </p>
-          </div>
-        </div>
-        <div className="text-right">
-          <p
-            className={`text-xl font-normal ${
-              isZeroBalance ? "text-[#A3A3A3]" : "text-[#06B6D4]"
-            }`}
-            style={{
-              fontFamily: "Space Grotesk",
-              letterSpacing: "-0.5px",
-            }}>
-            {balanceFormatted} {token.symbol}
-          </p>
-          <p
-            className="text-xs text-[#A3A3A3] font-normal"
-            style={{ fontFamily: "Space Grotesk" }}>
-            {isZeroBalance ? "No balance" : "Available to withdraw"}
-          </p>
-        </div>
-      </div>
-
-      {!isZeroBalance && (
-        <div className="space-y-3">
-          {/* Partial Withdraw */}
-          <div>
-            <AmountInput
-              value={withdrawAmount}
-              onChange={setWithdrawAmount}
-              label={`Withdraw ${token.symbol}`}
-              maxValue={balance || BigInt(0)}
-              maxLabel="Max"
-              disabled={isWithdrawing}
-            />
-            <TransactionButton
-              onClick={handleWithdraw}
-              disabled={
-                !withdrawAmount ||
-                parseFloat(withdrawAmount) <= 0 ||
-                parseFloat(withdrawAmount) > parseFloat(balanceFormatted)
-              }
-              loading={isWithdrawing}
-              variant="secondary"
-              size="sm"
-              className="w-full mt-2">
-              Withdraw {withdrawAmount ? `${withdrawAmount} ` : ""}
-              {token.symbol}
-            </TransactionButton>
-          </div>
-
-          {/* Withdraw All */}
-          <TransactionButton
-            onClick={handleWithdrawAll}
-            disabled={!hasBalance}
-            loading={isWithdrawing}
-            variant="primary"
-            size="sm"
-            className="w-full">
-            Withdraw All {token.symbol}
-          </TransactionButton>
-        </div>
-      )}
-
-      {isZeroBalance && (
-        <div className="text-center py-2">
-          <p
-            className="text-sm text-[#A3A3A3] font-normal"
-            style={{ fontFamily: "Space Grotesk" }}>
-            No balance available for withdrawal
-          </p>
-        </div>
-      )}
-    </div>
-  );
-};
+import { COMMON_TOKENS } from "./tokens";
+import { TokenBalanceCard } from "./TokenBalanceCard";
+import { RestrictedWalletHeader } from "./RestrictedWalletHeader";
+import { RestrictedWalletSummary } from "./RestrictedWalletSummary";
+import { LoanStatsPanel } from "./LoanStatsPanel";
+import { WithdrawalHelp } from "./WithdrawalHelp";
 
 export const RestrictedWalletPage: React.FC = () => {
   const {
@@ -184,7 +25,7 @@ export const RestrictedWalletPage: React.FC = () => {
     loanStats,
   } = useRestrictedWallet();
 
-  // Calculate total balances for summary - move hooks to component level
+  // Calculate total balances for summary
   const usdcBalance = useRestrictedWalletBalance(COMMON_TOKENS[0].address);
   const ethBalance = useRestrictedWalletBalance(COMMON_TOKENS[1].address);
   const btcBalance = useRestrictedWalletBalance(COMMON_TOKENS[2].address);
@@ -216,6 +57,16 @@ export const RestrictedWalletPage: React.FC = () => {
   const totalTokensWithBalance = tokenBalances.filter(
     (t) => t.balance > BigInt(0)
   ).length;
+
+  const withdrawLocked = loanIsActive;
+
+  const handleWithdrawAll = () => {
+    tokenBalances
+      .filter((t) => t.balance > BigInt(0))
+      .forEach((token) => {
+        withdrawAllTokens(token.address);
+      });
+  };
 
   if (!hasRestrictedWallet) {
     return (
@@ -257,143 +108,23 @@ export const RestrictedWalletPage: React.FC = () => {
     );
   }
 
-  if (loanIsActive) {
-    return (
-      <div className="max-w-4xl mx-auto space-y-6">
-        <StatusCard title="Restricted Wallet Status" status="active">
-          <StatusItem
-            label="Wallet Address"
-            value={
-              <ExplorerLink address={restrictedWalletAddress!} showIcon={false}>
-                {restrictedWalletAddress!.slice(0, 8)}...
-                {restrictedWalletAddress!.slice(-6)}
-              </ExplorerLink>
-            }
-          />
-          <StatusItem
-            label="Status"
-            value="Active Loan - Withdrawal Locked"
-            highlight={false}
-          />
-        </StatusCard>
-
-        <div className="text-center py-8">
-          <div className="mb-6">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-yellow-900/30 flex items-center justify-center">
-              <svg
-                className="w-8 h-8 text-yellow-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.664-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"
-                />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold text-white mb-2">
-              Loan Still Active
-            </h2>
-            <p className="text-gray-400 max-w-md mx-auto">
-              You cannot withdraw from your restricted wallet while you have an
-              active loan. Please repay your loan first to unlock withdrawal
-              functionality.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
-      <div>
-        <h1
-          className="text-3xl font-normal text-white mb-2"
-          style={{
-            fontFamily: "Space Grotesk",
-            letterSpacing: "-1px",
-            lineHeight: "1.1",
-          }}>
-          Restricted Wallet Control
-        </h1>
-        <p
-          className="text-[#A3A3A3] font-normal"
-          style={{ fontFamily: "Space Grotesk" }}>
-          Manage and withdraw your funds from the restricted trading wallet.
-        </p>
-        {loanStats && loanStats.totalLoansRepaid > 0 && (
-          <div className="mt-4 p-3 bg-green-900/20 border border-green-600/30 rounded-lg">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <p className="text-green-400 text-sm font-medium">
-                🎉 Congratulations! Your loan has been repaid. You can now
-                withdraw your trading profits.
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
+      <RestrictedWalletHeader
+        withdrawLocked={withdrawLocked}
+        loanStats={loanStats}
+      />
 
       {/* Wallet Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <StatusCard title="Wallet Status" status="inactive">
-          <StatusItem
-            label="Address"
-            value={
-              <ExplorerLink address={restrictedWalletAddress!} showIcon={false}>
-                {restrictedWalletAddress!.slice(0, 8)}...
-                {restrictedWalletAddress!.slice(-6)}
-              </ExplorerLink>
-            }
-          />
-          <StatusItem
-            label="Status"
-            value="Ready for Withdrawal"
-            highlight={true}
-          />
-          <StatusItem
-            label="Loan Status"
-            value="Loan Repaid - Withdrawal Unlocked"
-            highlight={true}
-          />
-        </StatusCard>
-
-        <StatusCard title="Token Summary" status="inactive">
-          <StatusItem
-            label="Tokens with Balance"
-            value={`${totalTokensWithBalance} of ${COMMON_TOKENS.length}`}
-          />
-          <StatusItem
-            label="Total Supported"
-            value={`${COMMON_TOKENS.length} tokens`}
-          />
-        </StatusCard>
-
-        <StatusCard title="Quick Actions" status="inactive">
-          <div className="space-y-2">
-            <TransactionButton
-              onClick={() => {
-                // Withdraw all tokens that have balance
-                tokenBalances
-                  .filter((t) => t.balance > BigInt(0))
-                  .forEach((token) => {
-                    withdrawAllTokens(token.address);
-                  });
-              }}
-              disabled={totalTokensWithBalance === 0 || isWithdrawing}
-              loading={isWithdrawing}
-              variant="primary"
-              size="sm"
-              className="w-full">
-              Withdraw All Tokens
-            </TransactionButton>
-          </div>
-        </StatusCard>
-      </div>
+      <RestrictedWalletSummary
+        restrictedWalletAddress={restrictedWalletAddress!}
+        withdrawLocked={withdrawLocked}
+        totalTokensWithBalance={totalTokensWithBalance}
+        totalSupportedTokens={COMMON_TOKENS.length}
+        onWithdrawAll={handleWithdrawAll}
+        isWithdrawing={isWithdrawing}
+      />
 
       {/* Token Balances and Withdrawal */}
       <div className="space-y-4">
@@ -418,10 +149,10 @@ export const RestrictedWalletPage: React.FC = () => {
             <TokenBalanceCard
               key={token.address}
               token={token}
-              restrictedWalletAddress={restrictedWalletAddress!}
               onWithdraw={withdrawToken}
               onWithdrawAll={withdrawAllTokens}
               isWithdrawing={isWithdrawing}
+              withdrawLocked={withdrawLocked}
             />
           ))}
         </div>
@@ -444,74 +175,10 @@ export const RestrictedWalletPage: React.FC = () => {
       )}
 
       {/* Loan Information */}
-      {loanStats && (
-        <div className="bg-blue-900/20 border border-blue-600/30 rounded-lg p-4">
-          <h3 className="text-lg font-medium text-blue-400 mb-2">
-            Loan Statistics
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-            <div>
-              <p className="text-gray-300">Total Loans Created</p>
-              <p className="text-white font-medium">
-                {String(loanStats.totalLoansCreated || 0)}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-300">Total Loans Repaid</p>
-              <p className="text-white font-medium">
-                {String(loanStats.totalLoansRepaid || 0)}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-300">Active Loans</p>
-              <p className="text-white font-medium">
-                {String(loanStats.activeLoans || 0)}
-              </p>
-            </div>
-          </div>
-          {loanStats.totalLoansRepaid > 0 && (
-            <div className="mt-4 p-3 bg-green-900/20 border border-green-600/30 rounded-lg">
-              <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <p className="text-green-400 text-sm font-medium">
-                  Your loan has been successfully repaid! You can now withdraw
-                  your trading profits.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+      {loanStats && <LoanStatsPanel loanStats={loanStats} />}
 
       {/* Help Section */}
-      <div className="bg-teal-900/20 border border-teal-600/30 rounded-lg p-4">
-        <h3 className="text-lg font-medium text-teal-400 mb-2">
-          How Withdrawal Works
-        </h3>
-        <ul className="text-sm text-gray-300 space-y-2">
-          <li>• You can only withdraw when no active loan exists</li>
-          <li>
-            • Withdrawals transfer tokens from restricted wallet to your main
-            wallet
-          </li>
-          <li>• You can withdraw partial amounts or all tokens at once</li>
-          <li>• Each withdrawal requires a separate transaction and gas fee</li>
-          <li>• Loan must be fully repaid before withdrawal is unlocked</li>
-        </ul>
-
-        {loanStats && loanStats.totalLoansRepaid > 0 && (
-          <div className="mt-4 p-3 bg-green-900/20 border border-green-600/30 rounded-lg">
-            <h4 className="text-green-400 font-medium mb-2">
-              ✅ Loan Repayment Status
-            </h4>
-            <p className="text-sm text-green-300">
-              Your loan has been successfully repaid! This means you can now
-              withdraw any trading profits that accumulated in your restricted
-              wallet during the loan period.
-            </p>
-          </div>
-        )}
-      </div>
+      <WithdrawalHelp loanStats={loanStats} />
     </div>
   );
 };
