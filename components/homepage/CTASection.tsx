@@ -37,7 +37,7 @@ export default function CTASection() {
           <p className="text-body-lg text-secondary max-w-[700px] mx-auto mb-12">
             Join the future of on-chain credit. Whether you&apos;re an
             institution seeking capital efficiency or an LP looking for yield,
-            Invalend provides the infrastructure.
+            Aurelic provides the infrastructure.
           </p>
 
           {/* CTA Buttons */}

@@ -15,7 +15,7 @@ export default function UseCasesSection() {
       tag: "INSTITUTIONS",
       title: "Treasury Capital Revolution",
       description:
-        "DAOs with $20M+ treasuries earning 3% APY in Aave. Deploy $10M via Invalend with $2M collateral. 5x leverage. Chain-enforced execution. Zero trust required.",
+        "DAOs with $20M+ treasuries earning 3% APY in Aave. Deploy $10M via Aurelic with $2M collateral. 5x leverage. Chain-enforced execution. Zero trust required.",
       metrics: [
         { label: "ROI ACHIEVED", value: "21.5%" },
         { label: "EXECUTION TIME", value: "6 months" },
@@ -29,7 +29,7 @@ export default function UseCasesSection() {
       tag: "PROFESSIONALS",
       title: "Market Making at Scale",
       description:
-        "Independent market maker with $1M capital. Limited by traditional leverage. Access $5M total through Invalend. 5x leverage. Self-custody maintained. Transparent execution.",
+        "Independent market maker with $1M capital. Limited by traditional leverage. Access $5M total through Aurelic. 5x leverage. Self-custody maintained. Transparent execution.",
       metrics: [
         { label: "RETURN GENERATED", value: "29.5%" },
         { label: "EXECUTION TIME", value: "3 months" },
@@ -43,7 +43,7 @@ export default function UseCasesSection() {
       tag: "COMMUNITY",
       title: "Passive Yield Maximization",
       description:
-        "DeFi investor with $200K USDC earning 3% in Aave. Deposit to Invalend vault. Earn 6% APY. Principal protected by auto-liquidation. 2x better than Aave.",
+        "DeFi investor with $200K USDC earning 3% in Aave. Deposit to Aurelic vault. Earn 6% APY. Principal protected by auto-liquidation. 2x better than Aave.",
       metrics: [
         { label: "YIELD IMPROVEMENT", value: "50%" },
         { label: "APY EARNED", value: "6%" },

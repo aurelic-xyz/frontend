@@ -53,7 +53,7 @@ export default function AppNavbar() {
                   color: "#FFFFFF",
                   fontFamily: "Space Grotesk",
                 }}>
-                Invalend
+                Aurelic
               </span>
             </Link>
 

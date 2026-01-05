@@ -82,7 +82,7 @@ export default function RiskDisclosureSection() {
             isVisible ? "animate-slide-in-up" : "opacity-0"
           }`}
           style={{ animationDelay: "600ms", animationFillMode: "both" }}>
-          Understanding the risks and limitations of the Invalend protocol
+          Understanding the risks and limitations of the Aurelic protocol
         </p>
 
         {/* Risk Categories Grid */}

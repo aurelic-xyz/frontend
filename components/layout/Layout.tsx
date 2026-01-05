@@ -28,7 +28,7 @@ export const DashboardPage = () => {
                 lineHeight: "1.1",
                 color: "#06B6D4",
               }}>
-              Welcome to Invalend
+              Welcome to Aurelic
             </h1>
             <p
               className="text-[#A3A3A3] text-lg"

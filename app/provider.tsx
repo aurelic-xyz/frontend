@@ -43,8 +43,8 @@ export const Provider = ({ children }: { children: React.ReactNode }) => {
 
   // Ensure client-side mounting to avoid hydration mismatch
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
-
     // Monitor connection health
     const handleConnectionError = (event: Event) => {
       console.warn("Connection error detected:", event);

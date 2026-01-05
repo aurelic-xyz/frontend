@@ -29,7 +29,7 @@ export const FaucetPage = () => {
               fontFamily: "Space Grotesk",
               lineHeight: "1.6",
             }}>
-            Get test USDC tokens for the Invalend protocol. This faucet allows
+            Get test USDC tokens for the Aurelic protocol. This faucet allows
             you to mint 1000 USDC tokens for testing purposes on Base Sepolia
             testnet.
           </p>
