@@ -7,6 +7,7 @@ import { Menu, X, ArrowRight } from "lucide-react";
 
 import { navigationItems } from "@/lib/utils/navigation";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 export default function AppNavbar() {
   const ConnectWallet = dynamic(
@@ -35,26 +36,13 @@ export default function AppNavbar() {
         <div className="px-6 sm:px-8 lg:px-12">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-105"
-                style={{
-                  background: "rgba(245, 200, 16, 0.1)",
-                  border: "1px solid rgba(245, 200, 16, 0.2)",
-                }}>
-                <div
-                  className="w-5 h-5 rounded-sm transition-all duration-300 group-hover:scale-110"
-                  style={{ background: "#F5C810" }}
-                />
-              </div>
-              <span
-                className="text-2xl font-normal tracking-[-0.5px] transition-colors duration-300 group-hover:text-[#F5C810]"
-                style={{
-                  color: "#FFFFFF",
-                  fontFamily: "Space Grotesk",
-                }}>
-                Aurelic
-              </span>
+            <Link href="/" className="flex items-center gap-3 transition-opacity duration-300 hover:opacity-80">
+              <Image
+                width={130}
+                height={130}
+                src="/logo.png"
+                alt="Aurelic"
+              />
             </Link>
 
             {/* Desktop Navigation */}

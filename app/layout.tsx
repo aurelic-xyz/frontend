@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "Aurelic - Community pre-funds institutional leverage",
   description:
     "Aurelic enables capital-efficient institutional leverage through community-backed prefunding with on-chain execution transparency.",
+  icons: {
+    icon: "/logo-favicon.svg",
+  },
 };
 
 export default function RootLayout({

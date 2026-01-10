@@ -39,13 +39,12 @@ export default function Footer() {
           <div className="lg:col-span-2 max-w-[320px]">
             <Link
               href="/"
-              className="flex items-center gap-3 mb-5 group transition-all duration-300 hover:opacity-80">
-              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-105">
-                <div className="w-5 h-5 bg-primary rounded-sm transition-all duration-300 group-hover:scale-110"></div>
-              </div>
-              <span className="text-xl text-primary transition-colors duration-300 group-hover:text-accent">
-                Aurelic
-              </span>
+              className="flex items-center gap-3 mb-5 transition-opacity duration-300 hover:opacity-80">
+              <img
+                src="/logo-text.svg"
+                alt="Aurelic"
+                className="h-8 w-auto"
+              />
             </Link>
             <p className="text-small text-tertiary leading-relaxed mb-8">
               Shared-risk liquidity infrastructure for on-chain institutions
@@ -158,7 +157,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-2 px-4 py-2 bg-tertiary border border-subtle rounded-md text-xs text-secondary">
             <div className="w-4 h-4 bg-accent rounded-sm"></div>
-            <span>Powered by Mantle</span>
+            <span>Powered by Lisk</span>
           </div>
         </div>
       </div>

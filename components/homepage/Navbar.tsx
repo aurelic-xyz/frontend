@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -54,22 +55,13 @@ export default function Navbar() {
             {/* Logo */}
             <Link
               href="/"
-              className="flex items-center gap-3 group transition-all duration-300 hover:opacity-80">
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-105"
-                style={{
-                  background: "rgba(245, 200, 16, 0.1)",
-                  border: "1px solid rgba(245, 200, 16, 0.2)",
-                }}>
-                <div
-                  className="w-5 h-5 rounded-sm transition-all duration-300 group-hover:scale-110"
-                  style={{ background: "#F5C810" }}></div>
-              </div>
-              <span
-                className="text-xl font-normal tracking-[-0.02em] transition-colors duration-300 group-hover:text-[#F5C810]"
-                style={{ color: "#FFFFFF" }}>
-                Aurelic
-              </span>
+              className="flex items-center gap-3 transition-opacity duration-300 hover:opacity-80">
+              <Image
+                width={130}
+                height={130}
+                src="/logo.png"
+                alt="Aurelic"
+              />
             </Link>
 
             {/* Desktop Navigation */}
