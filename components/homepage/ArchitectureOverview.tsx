@@ -422,7 +422,7 @@ export default function ArchitectureOverview() {
                   color: "#A3A3A3",
                   fontWeight: "400",
                 }}>
-                Base L2 optimized. Minimal gas costs.
+                Lisk L2 optimized. Minimal gas costs.
                 <span style={{ color: "#F5C810" }}>
                   Institutional-grade performance.
                 </span>

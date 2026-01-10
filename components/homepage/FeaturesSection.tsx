@@ -41,9 +41,9 @@ export default function FeaturesSection() {
     },
     {
       icon: Activity,
-      title: "Built on Base",
+      title: "Built on Lisk",
       description:
-        "Coinbase L2. Institutional infrastructure. Low fees. Fast finality. Production ready.",
+        "Lisk L2. Institutional infrastructure. Low fees. Fast finality. Production ready.",
       highlight: "SCALABLE",
     },
     {
