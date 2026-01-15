@@ -6,8 +6,15 @@ import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { formatUSDC } from "@/lib/utils/formatters";
 
 export const FaucetPage = () => {
-  const { usdcBalance, isMinting, isBusy, handleMint, hasUpdatedBalance } =
-    useFaucet();
+  const {
+    usdcBalance,
+    isMinting,
+    isBusy,
+    handleMint,
+    hasUpdatedBalance,
+    mintError,
+    resetStates,
+  } = useFaucet();
 
   return (
     <div className="w-full space-y-8">
@@ -110,9 +117,26 @@ export const FaucetPage = () => {
                 <p
                   className="text-sm text-[#F5C810] font-normal"
                   style={{ fontFamily: "Space Grotesk" }}>
-                  Successfully minted 1000 USDC! Your balance has been
-                  updated.
+                  Successfully minted 1000 USDC! Your balance has been updated.
                 </p>
+              </div>
+            )}
+
+            {/* Error Message */}
+            {mintError && (
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                <div className="flex items-center justify-between">
+                  <p
+                    className="text-sm text-red-400 font-normal"
+                    style={{ fontFamily: "Space Grotesk" }}>
+                    {mintError}
+                  </p>
+                  <button
+                    onClick={resetStates}
+                    className="text-red-400 hover:text-red-300 text-sm">
+                    ✕
+                  </button>
+                </div>
               </div>
             )}
 

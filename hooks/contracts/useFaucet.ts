@@ -7,15 +7,18 @@ import {
   useWriteContract,
   useWaitForTransactionReceipt,
   useWatchContractEvent,
+  usePublicClient,
 } from "wagmi";
 import { CONTRACT_CONFIGS } from "@/lib/contracts/addresses";
 
 export const useFaucet = () => {
   const { address } = useAccount();
+  const publicClient = usePublicClient();
   const [isMinting, setIsMinting] = useState(false);
   const [mintHash, setMintHash] = useState<`0x${string}` | undefined>(
     undefined
   );
+  const [mintError, setMintError] = useState<string | null>(null);
   const [balanceBeforeMint, setBalanceBeforeMint] = useState<bigint | null>(
     null
   );
@@ -94,8 +97,9 @@ export const useFaucet = () => {
   });
 
   const handleMint = async () => {
-    if (!address) return;
+    if (!address || !publicClient) return;
     setIsMinting(true);
+    setMintError(null);
     setHasUpdatedBalance(false);
     if (usdcBalance !== undefined && usdcBalance !== null) {
       try {
@@ -110,15 +114,62 @@ export const useFaucet = () => {
     try {
       // Mint 1000 USDC (1000 * 10^6 = 1,000,000,000)
       const amount = BigInt(1000 * 10 ** 6);
+
+      // First, simulate the transaction to catch any revert reasons
+      try {
+        await publicClient.simulateContract({
+          ...CONTRACT_CONFIGS.MOCK_USDC,
+          functionName: "mint",
+          args: [address, amount],
+          account: address,
+        });
+      } catch (simError: unknown) {
+        console.error("Simulation error:", simError);
+        // Extract revert reason if available
+        const errorMessage =
+          simError instanceof Error
+            ? simError.message
+            : "Transaction would fail";
+        if (errorMessage.includes("Cannot mint to zero address")) {
+          setMintError("Cannot mint to zero address");
+        } else if (errorMessage.includes("execution reverted")) {
+          setMintError(
+            "Transaction reverted. The contract may have restrictions."
+          );
+        } else {
+          // Continue anyway - simulation might fail but tx could succeed
+          console.warn("Simulation failed but attempting transaction anyway");
+        }
+      }
+
       const txHash = await mintAsync({
         ...CONTRACT_CONFIGS.MOCK_USDC,
         functionName: "mint",
         args: [address, amount],
-        gas: BigInt(200000), // Set reasonable gas limit for mint
       });
       setMintHash(txHash);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Mint error:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+
+      // Parse common error messages
+      if (
+        errorMessage.includes("User rejected") ||
+        errorMessage.includes("user rejected")
+      ) {
+        setMintError("Transaction was rejected by user");
+      } else if (errorMessage.includes("insufficient funds")) {
+        setMintError(
+          "Insufficient MNT for gas fees. Please get testnet MNT first."
+        );
+      } else if (errorMessage.includes("Internal JSON-RPC error")) {
+        setMintError(
+          "RPC error. Please try again or check your network connection."
+        );
+      } else {
+        setMintError(errorMessage.slice(0, 100)); // Truncate long errors
+      }
       setIsMinting(false);
     }
   };
@@ -127,6 +178,7 @@ export const useFaucet = () => {
     setIsMinting(false);
     setMintHash(undefined);
     setHasUpdatedBalance(false);
+    setMintError(null);
   };
 
   const isBusy = isMinting || isMintingTx || isAwaitingBalanceUpdate;
@@ -140,5 +192,6 @@ export const useFaucet = () => {
     refetchBalance,
     mintHash,
     hasUpdatedBalance,
+    mintError,
   };
 };
